@@ -27,18 +27,19 @@ class EchoNest_Api_Song extends EchoNest_Api
    * Get info about songs given a list of ids
    * http://developer.echonest.com/docs/v4/song.html#profile
    *
-   * @param   string|array $id        the rosetta ID of the song (can be an array of ids)
+   * @param   array $id               the rosetta ID of the song (can be an array of ids) or can be The Echo Nest or Rosetta ID of a track specified by the track_id  
    * @param   string|array $bucket    indicates what data should be returned with each artist
    * @param   bool    $limit          if true artists will be limited to those that appear in the catalog specified by the id: bucket
    * @return  array                   list of search results
    */
   public function profile($id, $bucket = null, $limit = false)
   {
-    $response = $this->client->get('song/profile', array(
-      'id'     => $id,
+    $options = array_merge(array(
       'bucket' => $bucket,
       'limit'  => $limit,
-    ));
+    ),$id);
+
+    $response = $this->client->get('song/profile', $options);
 
     return $this->returnResponse($response, 'songs');
   }
